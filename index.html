@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kadapa Dry Fruits</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        margin: 0;
+        padding: 15px;
+      }
+      h1 {
+        text-align: center;
+        color: #4a2c2a;
+      }
+
+      /* GRID */
+      .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      .product {
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .product img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+
+      .qty-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 8px;
+      }
+
+      .qty-controls button {
+        padding: 5px 10px;
+        font-size: 16px;
+        background: #25d366;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .qty {
+        margin: 0 10px;
+        font-weight: bold;
+      }
+
+      /* CART */
+      .cart {
+        background: #fff;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        margin: 6px 0;
+      }
+      .total {
+        text-align: right;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+      .order-btn {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background: #128c7e;
+        color: white;
+        border: none;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>🛒 Kadapa Dry Fruits</h1>
+
+    <!-- PRODUCTS GRID -->
+    <div class="products">
+      <div class="product">
+        <img src="images/Almonds.jpg" />
+        <h4>Almonds</h4>
+        <p>₹250 / 250g</p>
+        <div class="qty-controls">
+          <button onclick="updateQty('Almonds',250,-1)">−</button>
+          <span class="qty" id="qty-Almonds">0</span>
+          <button onclick="updateQty('Almonds',250,1)">+</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <img src="images/Cashews.jpg" />
+        <h4>Cashew</h4>
+        <p>₹300 / 250g</p>
+        <div class="qty-controls">
+          <button onclick="updateQty('Cashew',300,-1)">−</button>
+          <span class="qty" id="qty-Cashew">0</span>
+          <button onclick="updateQty('Cashew',300,1)">+</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <img src="images/Raisins.jpeg" />
+        <h4>Raisins</h4>
+        <p>₹120 / 250g</p>
+        <div class="qty-controls">
+          <button onclick="updateQty('Raisins',120,-1)">−</button>
+          <span class="qty" id="qty-Raisins">0</span>
+          <button onclick="updateQty('Raisins',120,1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CART -->
+    <div class="cart">
+      <h2>🛍 Your Cart</h2>
+      <div id="cartItems">No items added</div>
+      <div class="total" id="totalAmount"></div>
+      <button class="order-btn" onclick="orderWhatsApp()">
+        Order on WhatsApp
+      </button>
+    </div>
+
+    <script>
+      let cart = [];
+
+      function updateQty(name, price, change) {
+        let item = cart.find((i) => i.name === name);
+
+        if (!item && change > 0) {
+          cart.push({ name, price, qty: 1 });
+        } else if (item) {
+          item.qty += change;
+          if (item.qty <= 0) {
+            cart = cart.filter((i) => i.name !== name);
+          }
+        }
+        render();
+      }
+
+      function render() {
+        let cartDiv = document.getElementById("cartItems");
+        let totalDiv = document.getElementById("totalAmount");
+        cartDiv.innerHTML = "";
+        let total = 0;
+
+        document.querySelectorAll(".qty").forEach((q) => (q.innerText = 0));
+
+        if (cart.length === 0) {
+          cartDiv.innerText = "No items added";
+          totalDiv.innerText = "";
+          return;
+        }
+
+        cart.forEach((item) => {
+          document.getElementById("qty-" + item.name).innerText = item.qty;
+          let t = item.price * item.qty;
+          total += t;
+          cartDiv.innerHTML += `<div class="cart-item">${item.name} (${item.qty}) – ₹${t}</div>`;
+        });
+
+        totalDiv.innerText = "Total: ₹" + total;
+      }
+
+      function orderWhatsApp() {
+        if (cart.length === 0) {
+          alert("Cart is empty!");
+          return;
+        }
+
+        let msg = "Hello 👋 I want to order :  %0A%0A";
+        cart.forEach((item, i) => {
+          msg += `${i + 1}. ${item.name} - Quantity : ${item.qty}%0A`;
+        });
+
+        let phone = "918309959807"; // replace
+        window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+      }
+    </script>
+  </body>
+</html>
