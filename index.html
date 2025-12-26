@@ -92,6 +92,20 @@
         border-radius: 8px;
         cursor: pointer;
       }
+      .floating-wa {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #25d366;
+        color: white;
+        border: none;
+        padding: 14px 18px;
+        font-size: 16px;
+        border-radius: 50px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        z-index: 999;
+      }
     </style>
   </head>
 
@@ -191,7 +205,7 @@
           return;
         }
 
-        let msg = "Hello 👋 I want to order :  %0A%0A";
+        let msg = "Hello! I want to order :  %0A%0A";
         cart.forEach((item, i) => {
           msg += `${i + 1}. ${item.name} - Quantity : ${item.qty}%0A`;
         });
@@ -200,5 +214,8 @@
         window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
       }
     </script>
+    <button class="floating-wa" onclick="orderWhatsApp()">
+      🟢 Order on WhatsApp
+    </button>
   </body>
 </html>
